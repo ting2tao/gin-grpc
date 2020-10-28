@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option go_package= "./;simple";
+package pb;
+
+//服务端流式RPC：客户端发送请求到服务器，拿到一个流去读取返回的消息序列。 客户端读取返回的流，直到里面没有任何消息。
+
+//情景模拟：实时获取股票走势。
+//1.客户端要获取某原油股的实时走势，客户端发送一个请求
+//2.服务端实时返回该股票的走势
+
+// 定义发送消息
+message ServerStreamRequest{
+  // 定义发送的参数，采用驼峰命名方式，小写加下划线，如：student_name
+  string data = 1;
+}
+
+message ServerStreamResponse{
+  // 服务端流式响应
+  string stream_value = 1;
+}
+

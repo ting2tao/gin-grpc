@@ -2,12 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"net/http"
-
+	pb "gin-grpc/pb"
 	"github.com/gin-gonic/gin"
-	pb "github.com/gin-gonic/gin/examples/grpc/pb"
 	"google.golang.org/grpc"
+	"log"
 )
 
 func main() {
@@ -17,26 +15,21 @@ func main() {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	client := pb.NewGreeterClient(conn)
+	//client := grpc.NewServer()
 
-	// Set up a http server.
+	//建立grpc连接
+	client := pb.NewSimpleClient(conn)
 	r := gin.Default()
-	r.GET("/rest/n/:name", func(c *gin.Context) {
-		name := c.Param("name")
-
-		// Contact the server and print out its response.
-		req := &pb.HelloRequest{Name: name}
-		res, err := client.SayHello(c, req)
+	r.GET("/rest/n/:name", func(ctx *gin.Context) {
+		name := ctx.Param("name")
+		fmt.Println(name)
+		res, err := client.Route(ctx, &pb.SimpleRequest{Data: name})
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
+			log.Fatalf("Call Route err: %v", err)
 			return
 		}
+		fmt.Println(res.Code, res.Value, res.GetCode())
 
-		c.JSON(http.StatusOK, gin.H{
-			"result": fmt.Sprint(res.Message),
-		})
 	})
 
 	// Run http server

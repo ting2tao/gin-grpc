@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option go_package= "./;simple";
+package pb;
+
+// 定义发送请求信息
+message SimpleRequest{
+  // 参数类型 参数名 标识号
+  string data = 1;
+}
+
+// 定义响应信息
+message  SimpleResponse{
+  // 参数类型 参数名 标识号（不可重复）
+  int32 code = 1;
+  string value = 2;
+}
+
+//定义服务方法route
+service Simple{
+  rpc Route (SimpleRequest) returns (SimpleResponse){};
+}
