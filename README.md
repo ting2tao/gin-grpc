@@ -12,9 +12,3 @@ $ go run grpc/server.go
 ```sh
 $ go run gin/main.go
 ```
-
-3. use curl command to test it
-
-```sh
-$ curl -v 'http://localhost:8052/rest/n/thinkerou'
-```
